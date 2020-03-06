@@ -188,6 +188,8 @@ spec:
       port: 80
     - protocol: TCP
       port: 443
+    - protocol: UDP
+      port: 53
 EOF
 ```
 
@@ -216,3 +218,37 @@ spec:
       port: 443        
 EOF
 ```
+
+# Dns
+
+https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+
+Create a nslookup pod 
+```
+kubectl run nslookup --image=curlimages/curl --restart=Never -it --rm sh
+```
+
+As you can see, k8s will preprend all dns queries with `nginx.svc.cluster.local svc.cluster.local cluster.local`
+```
+cat /etc/resolv.conf
+search nginx.svc.cluster.local svc.cluster.local cluster.local
+nameserver 10.96.0.10
+options ndots:5
+```
+
+Resolve nginx svc 
+
+```
+nslookup nginx.nginx.svc.cluster.local
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+Name:	nginx.nginx.svc.cluster.local
+Address: 10.96.204.245```
+
+
+```(⎈ |kind-kind:nginx)➜  ~ k get svc -n nginx
+NAME    TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+nginx   NodePort   10.96.204.245   <none>        80:30679/TCP   55m
+(⎈ |kind-kind:nginx)➜  ~
+````
