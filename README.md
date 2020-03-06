@@ -86,6 +86,13 @@ kube-system          kube-proxy-bknls                             1/1     Runnin
 kube-system          kube-scheduler-kind-control-plane            1/1     Running   0          2m43s   172.17.0.2     kind-control-plane   <none>           <none>
 ```
 
+# Deploy metrics-server
+
+```sh
+kubectl -n kube-system apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/metrics-server.yml
+```
+
+
 # Services and Networking (13%)
 
 https://kubernetes.io/docs/concepts/services-networking/service/
