@@ -224,31 +224,42 @@ EOF
 https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
 
 Create a nslookup pod 
-```
+
+```sh
 kubectl run nslookup --image=curlimages/curl --restart=Never -it --rm sh
 ```
 
-As you can see, k8s will preprend all dns queries with `nginx.svc.cluster.local svc.cluster.local cluster.local`
+Run the commands bellow inside the nslookup container. 
 ```
-cat /etc/resolv.conf
+$ cat /etc/resolv.conf
 search nginx.svc.cluster.local svc.cluster.local cluster.local
 nameserver 10.96.0.10
 options ndots:5
+
+$ nslookup 10.96.0.10
+Server:		10.96.0.10
+Address:	10.96.0.10:53
+
+10.0.96.10.in-addr.arpa	name = kube-dns.kube-system.svc.cluster.local
+
 ```
 
-Resolve nginx svc 
+As you can see all the dns queries will be forwarded to the kube-dns pod (kube-dns.kube-system.svc.cluster.local).
+
+Resolve the nginx and kubernetes api service address inside the nslookup container. 
 
 ```
-nslookup nginx.nginx.svc.cluster.local
+$ nslookup nginx.nginx.svc.cluster.local
 Server:		10.96.0.10
 Address:	10.96.0.10:53
 
 Name:	nginx.nginx.svc.cluster.local
-Address: 10.96.204.245```
+Address: 10.96.204.245
 
+$ nslookup  kubernetes.default.svc.cluster.local
+Server:		10.96.0.10
+Address:	10.96.0.10:53
 
-```(⎈ |kind-kind:nginx)➜  ~ k get svc -n nginx
-NAME    TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
-nginx   NodePort   10.96.204.245   <none>        80:30679/TCP   55m
-(⎈ |kind-kind:nginx)➜  ~
-````
+Name:	kubernetes.default.svc.cluster.local
+Address: 10.96.0.1
+```
