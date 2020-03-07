@@ -1,14 +1,14 @@
 # k8s-team-ckad-training
+
 k8s-team-ckad-training
-
-
 
 # Requirements
 
-## Docker 
+## Docker
+
 [https://docs.docker.com/install/#supported-platforms](https://docs.docker.com/install/#supported-platforms)
 
-## Kubectl 
+## Kubectl
 
 [https://kubernetes.io/docs/tasks/tools/install-kubectl/](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
@@ -16,7 +16,7 @@ k8s-team-ckad-training
 
 On Mac via Homebrew:
 
-```console
+```sh
 brew install kind
 ```
 
@@ -30,35 +30,19 @@ OR via [Chocolatey](https://chocolatey.org/packages/kind)
 choco install kind
 ```
 
-# Install kind cluster 
-
-On Mac via Homebrew:
-```sh
-brew install kind
-```
-
-On Windows:
-```
-curl.exe -Lo kind-windows-amd64.exe https://github.com/kubernetes-sigs/kind/releases/download/v0.7.0/kind-windows-amd64
-Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
-
-# OR via Chocolatey (https://chocolatey.org/packages/kind)
-choco install kind
-```
-
 
 # Create a kind cluster
 
 ```sh
-cat <<EOF > /tmp/cluster-config.txt 
+cat <<EOF > /tmp/cluster-config.txt
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 networking:
-  disableDefaultCNI: true 
-  podSubnet: 192.168.0.0/16 
+  disableDefaultCNI: true
+  podSubnet: 192.168.0.0/16
 EOF
 
-kind create cluster --config /tmp/cluster-config.txt 
+kind create cluster --config /tmp/cluster-config.txt
 ```
 
 Deploy calico overlay network (required for the network policy)
@@ -70,9 +54,8 @@ kubectl -n kube-system set env daemonset/calico-node FELIX_IGNORELOOSERPF=true
 
 Make sure all pods are up and Running before you follow the next steps.
 
-
 ```sh
-$kubectl get pods --all-namespaces -o wide
+kubectl get pods --all-namespaces -o wide
 
 NAMESPACE            NAME                                         READY   STATUS    RESTARTS   AGE     IP             NODE                 NOMINATED NODE   READINESS GATES
 kube-system          calico-kube-controllers-5c45f5bd9f-dtx4s     1/1     Running   0          2m31s   192.168.82.1   kind-control-plane   <none>           <none>
@@ -88,27 +71,30 @@ kube-system          kube-scheduler-kind-control-plane            1/1     Runnin
 
 # Deploy metrics-server
 
-```sh
+To enable metrics for CPU and Memory metrics-server has to be installed.
+We have prepared a version of metrics-server manifest based on the stable helm chart and updated the flags on the metrics-server container to be able to start in Kind.
+
+```bash
 kubectl -n kube-system apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/metrics-server.yml
 ```
 
-
 # Services and Networking (13%)
 
-https://kubernetes.io/docs/concepts/services-networking/service/
+<https://kubernetes.io/docs/concepts/services-networking/service/>
 
-https://kubernetes.io/docs/concepts/services-networking/network-policies/
+<https://kubernetes.io/docs/concepts/services-networking/network-policies/>
 
 Create namespace nginx and set is as the current namespace
 
 ```sh
 kubectl create ns nginx
-kubectl config set-context --current --namespace=nginx 
+kubectl config set-context --current --namespace=nginx
 ```
 
 # Deploy a nginx pod
+
 ```sh
-cat <<EOF | kubectl create -f - 
+cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -130,6 +116,7 @@ EOF
 ````
 
 List all pods with label `app=my-nginx`
+
 ```
 kubectl get pods -l app=my-nginx
 ```
@@ -142,12 +129,13 @@ kubectl get svc -o wide
 ```
 
 export cluster ip to a variable
+
 ```
 CLUSTER_IP=`kubectl get svc  -o jsonpath='{.items[0].spec.clusterIP}'`
 echo $CLUSTER_IP
 ```
 
-# Network policies 
+# Network policies
 
 create a temporary pod to connect to the nginx nodeport (leave this command running in a new console tab).
 
@@ -155,30 +143,31 @@ create a temporary pod to connect to the nginx nodeport (leave this command runn
 kubectl run curl --image=curlimages/curl --restart=Never -it --rm -- sh -c "while true; do curl --connect-timeout 3 -I $CLUSTER_IP:80 && sleep 1 ; done"
 ```
 
-Wait until the previous command returns http status 200 (OK). 
+Wait until the previous command returns http status 200 (OK).
 
-Create a network policy to deny all ingress and egress traffic in the current namespace. 
+Create a network policy to deny all ingress and egress traffic in the current namespace.
+
 ```
-cat <<EOF | kubectl apply -f - 
+cat <<EOF | kubectl apply -f -
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: default-deny
   namespace: nginx
 spec:
-  podSelector: {}   
+  podSelector: {}
   policyTypes:
   - Ingress
   - Egress
 EOF
 ```
 
-Open the previous tab, where the curl pod command is running, you will probably see a curl error like `curl: (28) Connection timed out after 3001 milliseconds`. This means the network policy is in place and all the inbound/outbound traffic in the namespace is denied. 
+Open the previous tab, where the curl pod command is running, you will probably see a curl error like `curl: (28) Connection timed out after 3001 milliseconds`. This means the network policy is in place and all the inbound/outbound traffic in the namespace is denied.
 
 Create a new network policy to allow egress traffic to port 80 and 443.
 
 ```
-cat <<EOF | kubectl apply -f - 
+cat <<EOF | kubectl apply -f -
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -203,7 +192,7 @@ EOF
 Create another network policy to allow ingress traffic from pod with label `run=curl` to port 80 and 443.
 
 ```
-cat <<EOF | kubectl apply -f - 
+cat <<EOF | kubectl apply -f -
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -214,7 +203,7 @@ spec:
   - Ingress
   podSelector: {}
   ingress:
-  - from:    
+  - from:
     - podSelector:
         matchLabels:
           run: curl
@@ -222,21 +211,22 @@ spec:
     - protocol: TCP
       port: 80
     - protocol: TCP
-      port: 443        
+      port: 443
 EOF
 ```
 
 # Dns
 
-https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+<https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/>
 
-Create a nslookup pod 
+Create a nslookup pod
 
 ```sh
 kubectl run nslookup --image=curlimages/curl --restart=Never -it --rm sh
 ```
 
-Run the commands bellow inside the nslookup container. 
+Run the commands bellow inside the nslookup container.
+
 ```
 $ cat /etc/resolv.conf
 search nginx.svc.cluster.local svc.cluster.local cluster.local
@@ -244,29 +234,29 @@ nameserver 10.96.0.10
 options ndots:5
 
 $ nslookup 10.96.0.10
-Server:		10.96.0.10
-Address:	10.96.0.10:53
+Server:  10.96.0.10
+Address: 10.96.0.10:53
 
-10.0.96.10.in-addr.arpa	name = kube-dns.kube-system.svc.cluster.local
+10.0.96.10.in-addr.arpa name = kube-dns.kube-system.svc.cluster.local
 
 ```
 
 As you can see all the dns queries will be forwarded to the kube-dns pod (kube-dns.kube-system.svc.cluster.local).
 
-Resolve the nginx and kubernetes api service address inside the nslookup container. 
+Resolve the nginx and kubernetes api service address inside the nslookup container.
 
 ```
 $ nslookup nginx.nginx.svc.cluster.local
-Server:		10.96.0.10
-Address:	10.96.0.10:53
+Server:  10.96.0.10
+Address: 10.96.0.10:53
 
-Name:	nginx.nginx.svc.cluster.local
+Name: nginx.nginx.svc.cluster.local
 Address: 10.96.204.245
 
 $ nslookup  kubernetes.default.svc.cluster.local
-Server:		10.96.0.10
-Address:	10.96.0.10:53
+Server:  10.96.0.10
+Address: 10.96.0.10:53
 
-Name:	kubernetes.default.svc.cluster.local
+Name: kubernetes.default.svc.cluster.local
 Address: 10.96.0.1
 ```
