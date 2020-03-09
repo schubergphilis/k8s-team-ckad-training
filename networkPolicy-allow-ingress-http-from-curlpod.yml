@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-http-from-curlpod
+  namespace: nginx
+spec:
+  policyTypes:
+  - Ingress
+  podSelector: {}
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          run: curl
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
