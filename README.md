@@ -34,7 +34,7 @@ choco install kind -y
 # Create a kind cluster
 
 ```shw
-kind create cluster --config https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/cluster-config.yml
+kind create cluster --config https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/cluster-config.yml
 ```
 
 Deploy calico overlay network (required for the network policy)
@@ -67,7 +67,7 @@ To enable metrics for CPU and Memory metrics-server has to be installed.
 We have prepared a version of metrics-server manifest based on the stable helm chart and updated the flags on the metrics-server container to be able to start in Kind.
 
 ```bash
-kubectl -n kube-system apply -f metrics-server.yml
+kubectl -n kube-system apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/metrics-server.yml
 ```
 
 Give it some time and then test if it is working:
