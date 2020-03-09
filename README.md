@@ -34,7 +34,7 @@ choco install kind -y
 # Create a kind cluster
 
 ```shw
-kind create cluster --config cluster-config.yml
+kind create cluster --config https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/cluster-config.yml
 ```
 
 Deploy calico overlay network (required for the network policy)
