@@ -27,22 +27,14 @@ curl.exe -Lo kind-windows-amd64.exe https://github.com/kubernetes-sigs/kind/rele
 Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
 
 OR via [Chocolatey](https://chocolatey.org/packages/kind)
-choco install kind
+choco install kind -y
 ```
 
 
 # Create a kind cluster
 
-```sh
-cat <<EOF > /tmp/cluster-config.txt
-kind: Cluster
-apiVersion: kind.x-k8s.io/v1alpha4
-networking:
-  disableDefaultCNI: true
-  podSubnet: 192.168.0.0/16
-EOF
-
-kind create cluster --config /tmp/cluster-config.txt
+```shw
+kind create cluster --config cluster-config.yml
 ```
 
 Deploy calico overlay network (required for the network policy)
@@ -75,7 +67,16 @@ To enable metrics for CPU and Memory metrics-server has to be installed.
 We have prepared a version of metrics-server manifest based on the stable helm chart and updated the flags on the metrics-server container to be able to start in Kind.
 
 ```bash
-kubectl -n kube-system apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/metrics-server.yml
+kubectl -n kube-system apply -f metrics-server.yml
+```
+
+Give it some time and then test if it is working:
+
+```bash
+kubectl top nodes
+NAME                 CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+kind-control-plane   368m         18%    943Mi           31%
+
 ```
 
 # Services and Networking (13%)
@@ -94,125 +95,56 @@ kubectl config set-context --current --namespace=nginx
 # Deploy a nginx pod
 
 ```sh
-cat <<EOF | kubectl create -f -
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    app: my-nginx
-  name: nginx
-  namespace: nginx
-spec:
-  containers:
-  - image: nginx
-    name: nginx
-    ports:
-    - containerPort: 80
-    resources: {}
-  dnsPolicy: ClusterFirst
-  restartPolicy: Never
-status: {}
-EOF
-````
+kubectl create -f pod-nginx.yml
+```
 
 List all pods with label `app=my-nginx`
 
-```
+```sh
 kubectl get pods -l app=my-nginx
 ```
 
 create service with expose command
 
-```
+```sh
 kubectl expose po nginx --port=80 --type=NodePort
 kubectl get svc -o wide
 ```
 
-export cluster ip to a variable
+Find cluster IP
 
-```
-CLUSTER_IP=`kubectl get svc  -o jsonpath='{.items[0].spec.clusterIP}'`
-echo $CLUSTER_IP
+```sh
+kubectl get svc  -o jsonpath='{.items[0].spec.clusterIP}'
 ```
 
 # Network policies
 
 create a temporary pod to connect to the nginx nodeport (leave this command running in a new console tab).
 
-```
-kubectl run curl --image=curlimages/curl --restart=Never -it --rm -- sh -c "while true; do curl --connect-timeout 3 -I $CLUSTER_IP:80 && sleep 1 ; done"
+```sh
+kubectl run curl --image=curlimages/curl --restart=Never -it --rm -- sh -c "while true; do curl --connect-timeout 3 -I <CLUSTER_IP>:80 && sleep 1 ; done"
 ```
 
 Wait until the previous command returns http status 200 (OK).
 
 Create a network policy to deny all ingress and egress traffic in the current namespace.
 
-```
-cat <<EOF | kubectl apply -f -
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny
-  namespace: nginx
-spec:
-  podSelector: {}
-  policyTypes:
-  - Ingress
-  - Egress
-EOF
+```sh
+kubectl apply -f networkPolicy-default-deny.yml
 ```
 
 Open the previous tab, where the curl pod command is running, you will probably see a curl error like `curl: (28) Connection timed out after 3001 milliseconds`. This means the network policy is in place and all the inbound/outbound traffic in the namespace is denied.
 
 Create a new network policy to allow egress traffic to port 80 and 443.
 
-```
-cat <<EOF | kubectl apply -f -
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-egress-http
-  namespace: nginx
-spec:
-  podSelector: {}
-  policyTypes:
-  - Egress
-  egress:
-  - to:
-    ports:
-    - protocol: TCP
-      port: 80
-    - protocol: TCP
-      port: 443
-    - protocol: UDP
-      port: 53
-EOF
+```sh
+kubectl apply -f networkPolicy-allow-egress-http.yml
 ```
 
 Create another network policy to allow ingress traffic from pod with label `run=curl` to port 80 and 443.
 
-```
-cat <<EOF | kubectl apply -f -
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-ingress-http-from-curlpod
-  namespace: nginx
-spec:
-  policyTypes:
-  - Ingress
-  podSelector: {}
-  ingress:
-  - from:
-    - podSelector:
-        matchLabels:
-          run: curl
-    ports:
-    - protocol: TCP
-      port: 80
-    - protocol: TCP
-      port: 443
-EOF
+```sh
+kubectl apply -f networkPolicy-allow-ingress-http-from-curlpod.yml
 ```
 
 # Dns
@@ -227,7 +159,7 @@ kubectl run nslookup --image=curlimages/curl --restart=Never -it --rm sh
 
 Run the commands bellow inside the nslookup container.
 
-```
+```sh
 $ cat /etc/resolv.conf
 search nginx.svc.cluster.local svc.cluster.local cluster.local
 nameserver 10.96.0.10
