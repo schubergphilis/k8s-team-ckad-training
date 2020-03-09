@@ -67,7 +67,7 @@ To enable metrics for CPU and Memory metrics-server has to be installed.
 We have prepared a version of metrics-server manifest based on the stable helm chart and updated the flags on the metrics-server container to be able to start in Kind.
 
 ```bash
-kubectl -n kube-system apply -f metrics-server.yml
+kubectl -n kube-system apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/metrics-server.yml
 ```
 
 Give it some time and then test if it is working:
@@ -95,7 +95,7 @@ kubectl config set-context --current --namespace=nginx
 # Deploy a nginx pod
 
 ```sh
-kubectl create -f pod-nginx.yml
+kubectl create -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/pod-nginx.yml
 ```
 
 List all pods with label `app=my-nginx`
@@ -114,7 +114,7 @@ kubectl get svc -o wide
 Find cluster IP
 
 ```sh
-kubectl get svc  -o jsonpath='{.items[0].spec.clusterIP}'
+kubectl get svc -o jsonpath='{.items[0].spec.clusterIP}'
 ```
 
 # Network policies
@@ -130,7 +130,7 @@ Wait until the previous command returns http status 200 (OK).
 Create a network policy to deny all ingress and egress traffic in the current namespace.
 
 ```sh
-kubectl apply -f networkPolicy-default-deny.yml
+kubectl apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/networkPolicy-default-deny.yml
 ```
 
 Open the previous tab, where the curl pod command is running, you will probably see a curl error like `curl: (28) Connection timed out after 3001 milliseconds`. This means the network policy is in place and all the inbound/outbound traffic in the namespace is denied.
@@ -138,13 +138,13 @@ Open the previous tab, where the curl pod command is running, you will probably 
 Create a new network policy to allow egress traffic to port 80 and 443.
 
 ```sh
-kubectl apply -f networkPolicy-allow-egress-http.yml
+kubectl apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/networkPolicy-allow-egress-http.yml
 ```
 
 Create another network policy to allow ingress traffic from pod with label `run=curl` to port 80 and 443.
 
 ```sh
-kubectl apply -f networkPolicy-allow-ingress-http-from-curlpod.yml
+kubectl apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/networkPolicy-allow-ingress-http-from-curlpod.yml
 ```
 
 # Dns
