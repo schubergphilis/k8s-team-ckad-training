@@ -67,7 +67,16 @@ To enable metrics for CPU and Memory metrics-server has to be installed.
 We have prepared a version of metrics-server manifest based on the stable helm chart and updated the flags on the metrics-server container to be able to start in Kind.
 
 ```bash
-kubectl -n kube-system apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/metrics-server.yml
+kubectl -n kube-system apply -f metrics-server.yml
+```
+
+Give it some time and then test if it is working:
+
+```bash
+kubectl top nodes
+NAME                 CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+kind-control-plane   368m         18%    943Mi           31%
+
 ```
 
 Give it some time and then test if it is working:
@@ -95,6 +104,7 @@ kubectl config set-context --current --namespace=nginx
 # Deploy a nginx pod
 
 ```sh
+
 kubectl create -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/pod-nginx.yml
 ```
 
@@ -138,6 +148,7 @@ Open the previous tab, where the curl pod command is running, you will probably 
 Create a new network policy to allow egress traffic to port 80 and 443.
 
 ```sh
+
 kubectl apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/networkPolicy-allow-egress-http.yml
 ```
 
