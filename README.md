@@ -40,7 +40,7 @@ kind create cluster --config https://raw.githubusercontent.com/schubergphilis/k8
 Deploy calico overlay network (required for the network policy)
 
 ```
-kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/calico.yaml
+kubectl apply -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/calico.yaml
 kubectl -n kube-system set env daemonset/calico-node FELIX_IGNORELOOSERPF=true
 ```
 
