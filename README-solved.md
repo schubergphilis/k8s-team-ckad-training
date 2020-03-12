@@ -1032,6 +1032,7 @@ kubectl delete hpa webapp
 
 
 * Create a job with an image of busybox which echos “Hello I am from job” and make it run 10 times one after one
+
 <details><summary>show</summary>
 <p>
 
@@ -1069,7 +1070,8 @@ kubectl create -f hello-job.yaml
 ```
  
 
- 
+ </p>
+</details>
 
  
 
