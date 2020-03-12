@@ -588,7 +588,7 @@ spec:​
 * Create 6 nginx pods in which two of them are labeled env=prod, another two are labeled env=acc, and the last two are labeled env=dev​
 
 <details><summary>show</summary>
-<p>
+
 ```sh 
 kubectl run nginx-dev1 --image=nginx --restart=Never --labels=env=dev​
 kubectl run nginx-dev2 --image=nginx --restart=Never --labels=env=dev​
@@ -603,7 +603,7 @@ kubectl run nginx-prod2 --image=nginx --restart=Never --labels=env=prod​
 * Verify all the pods are created with correct labels​
 
 <details><summary>show</summary>
-<p>
+
 ```sh 
 kubeclt get pods --show-labels​
 ```
@@ -613,7 +613,7 @@ kubeclt get pods --show-labels​
 
 * Get the pods with label env=acc​
 <details><summary>show</summary>
-<p>
+
 ```sh 
 kubectl get pods -l env=acc​
 ```
@@ -623,7 +623,7 @@ kubectl get pods -l env=acc​
 
 * Get the pods with label env​
 <details><summary>show</summary>
-<p>
+
 ```sh 
 kubectl get pods -L env​
 ```
@@ -633,7 +633,7 @@ kubectl get pods -L env​
 
 * Get the pods with labels env=dev and env=prod and output the labels as well​
 <details><summary>show</summary>
-<p>
+
 ```sh 
 kubectl get pods -l 'env in (dev,prod)' --show-labels​
 ```
@@ -643,7 +643,7 @@ kubectl get pods -l 'env in (dev,prod)' --show-labels​
 
 * Change the label for one of the pod to env=uat and list all the pods to verify​
 <details><summary>show</summary>
-<p>
+
 
 ```sh 
 kubectl label pod/nginx-dev2 env=uat --overwrite​
