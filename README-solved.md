@@ -233,7 +233,7 @@ Address: 10.96.0.1
 
 # Exam tips​
 
-* https://kubernetes.io/docs/reference/kubectl/cheatsheet/​
+* https://kubernetes.io/docs/reference/kubectl/cheatsheet
 
 * Setup Kubectl Autocomplete at the start of the exam!​
 
