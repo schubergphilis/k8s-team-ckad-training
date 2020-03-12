@@ -833,7 +833,8 @@ kubectl create -f pod.yaml
 
 
 ```sh 
-kubectl create deployment webapp --image=nginx:1.17.1 --replicas=5
+kubectl create deployment webapp --image=nginx:1.17.1
+kubectl scale deployment webapp --replicas=5
 ```
 </p>
 </details>
