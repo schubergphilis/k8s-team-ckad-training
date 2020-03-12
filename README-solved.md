@@ -379,33 +379,33 @@ edit the pod to following yaml and create it​
 ​apiVersion: v1​
 kind: Pod​
 metadata:​
-creationTimestamp: null​
-labels:​
-run: busybox​
-name: busybox​
+  creationTimestamp: null​
+  labels:​
+    run: busybox​
+    name: busybox​
 spec:​
-containers:​
-- args:​
-- bin/sh​
-- -c​
-- ls; sleep 3600​
-image: busybox​
-name: busybox1​
-resources: {}​
-- args:​
-- bin/sh​
-- -c​
-- echo Hello world; sleep 3600​
-image: busybox​
-name: busybox2​
-resources: {}​
-- args:​
-- bin/sh​
-- -c​
-- echo this is third container; sleep 3600​
-image: busybox​
-name: busybox3​
-resources: {}​
+  containers:​
+  - args:​
+    - bin/sh​
+    - -c​
+    - ls; sleep 3600​
+    image: busybox​
+    name: busybox1​
+    resources: {}​
+  - args:​
+    - bin/sh​
+    - -c​
+    - echo Hello world; sleep 3600​
+    image: busybox​
+    name: busybox2​
+    resources: {}​
+  - args:​
+    - bin/sh​
+    - -c​
+    - echo this is third container; sleep 3600​
+    image: busybox​
+    name: busybox3​
+    resources: {}​
 dnsPolicy: ClusterFirst​
 restartPolicy: Never​
 status: {}​
@@ -544,25 +544,25 @@ In this example, we define a volume named html. Its type is emptyDir, which mean
 apiVersion: v1​
 kind: Pod​
 metadata:​
-name: init-container-test​
+  name: init-container-test​
 spec:​
-containers:​
-- name: application-container​
-image: alpine​
-command: ['sh', '-c', 'if [ -f /work/sharedfile.txt ]; then sleep 99999; else exit; fi']​
-volumeMounts:​
-- name: workdir-volume​
-mountPath: /work​
-initContainers:​
-- name: init-container​
-image: busybox:1.28​
-command: ['sh', '-c', 'mkdir /work; echo>/work/sharedfile.txt']​
-volumeMounts:​
-- name: workdir-volume​
-mountPath: /work​
-volumes:​
-- name: workdir-volume​
-emptyDir: {}​
+  containers:​
+  - name: application-container​
+    image: alpine​
+    command: ['sh', '-c', 'if [ -f /work/sharedfile.txt ]; then sleep 99999; else exit; fi']​
+    volumeMounts:​
+      - name: workdir-volume​
+        mountPath: /work​
+  initContainers:​
+  - name: init-container​
+    image: busybox:1.28​
+    command: ['sh', '-c', 'mkdir /work; echo>/work/sharedfile.txt']​
+    volumeMounts:​
+    - name: workdir-volume​
+      mountPath: /work​
+  volumes:​
+  - name: workdir-volume​
+    emptyDir: {}​
 
 ```
 ​</p>
