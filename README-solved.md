@@ -208,218 +208,218 @@ Address: 10.96.0.1
 
 # CKAD Exam preparation by the Schuberg Philis Kubernetes Team
 
-# Who are we?​
+# Who are we?
 * Ivan Dechovski
 * Jeferson Vitalino
 * Alberto Rodriguez
 * Giancarlo Rubio 
 
 
-# What to expect from the exam?​
+# What to expect from the exam?
 
-* 19 questions in 2 hours.​
+* 19 questions in 2 hours.
 
-* The CKAD is a performance driven exam, speed is key.​
+* The CKAD is a performance driven exam, speed is key.
 
-* Allowed documentation domains:​
-  * https://kubernetes.io/docs/​
-  * https://github.com/kubernetes/​
-  * https://kubernetes.io/blog/​
+* Allowed documentation domains:
+  * https://kubernetes.io/docs/
+  * https://github.com/kubernetes/
+  * https://kubernetes.io/blog/
 
-* 66% is a pass.​
+* 66% is a pass.
 
 * Free re-take ( if booked on cncf)
 
 
-# Exam tips​
+# Exam tips
 
 * https://kubernetes.io/docs/reference/kubectl/cheatsheet
 
-* Setup Kubectl Autocomplete at the start of the exam!​
+* Setup Kubectl Autocomplete at the start of the exam!
 
-* Generate pod/service yaml with kubectl:​
+* Generate pod/service yaml with kubectl:
 
-    * kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > pod.yaml​
-    * kubectl expose deployment nginx --port=80 --target-port=8000​
+    * kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > pod.yaml
+    * kubectl expose deployment nginx --port=80 --target-port=8000
 
-* Use kubernetes documentation to find similar YAML manifests.​
+* Use kubernetes documentation to find similar YAML manifests.
 * If you are writing YAML, it will slow you down! Copy + paste and Edit.
 
 
 
-# Kubernetes Objects​
-Kubernetes defines a set of building blocks ("primitives"), which collectively provide mechanisms that deploy, maintain, and scale applications based on CPU, memory or custom metrics.​
+# Kubernetes Objects
+Kubernetes defines a set of building blocks ("primitives"), which collectively provide mechanisms that deploy, maintain, and scale applications based on CPU, memory or custom metrics.
 
-* Pods​
-* Replica Sets​
-* Services​
-* Volumes​
-* Namespaces​
-* ConfigMaps and Secrets​
-* StatefulSets​
-* DaemonSets​
+* Pods
+* Replica Sets
+* Services
+* Volumes
+* Namespaces
+* ConfigMaps and Secrets
+* StatefulSets
+* DaemonSets
 
 
-# Core Concepts (13%)​
+# Core Concepts (13%)
 
-* Understand Kubernetes API Primitives​
+* Understand Kubernetes API Primitives
 * Create and Configure Basic Pods
 
-# Core Concepts (13%)​ - Questions
+# Core Concepts (13%) - Questions
 
-### Create the namespace sbp​
+### Create the namespace sbp
 <details><summary>show</summary>
 <p>
-kubectl create namespace sbp​
+kubectl create namespace sbp
 </p>
 </details>
 
-### ​Using the new namespace, create the nginx pod with version 1.17.8 and expose port 80 of the pod
+### Using the new namespace, create the nginx pod with version 1.17.8 and expose port 80 of the pod
 <details><summary>show</summary>
 <p>
 kubectl -n sbp run nginx --image=nginx:1.17.8 --restart=Never --port=80
 </p>
 </details>
 
-### Change the image version to 1.17.8-alpine for the pod you just created and verify the image version is updated​
+### Change the image version to 1.17.8-alpine for the pod you just created and verify the image version is updated
 <details><summary>show</summary>
 <p>
-kubectl -n sbp set image pod/nginx nginx=nginx:1.17.8-alpine​
-kubectl -n sbp describe po nginx​
+kubectl -n sbp set image pod/nginx nginx=nginx:1.17.8-alpine
+kubectl -n sbp describe po nginx
 </p>
 </details>
 
-### Change the Image version back to 1.17.8 for the pod you just updated and observe the changes​
+### Change the Image version back to 1.17.8 for the pod you just updated and observe the changes
 <details><summary>show</summary>
 <p>
-kubectl –n sbp set image pod/nginx nginx=nginx:1.17.1​
-kubectl –n sbp describe po nginx​
-kubectl –n sbp get po nginx -w # watch it​
+kubectl –n sbp set image pod/nginx nginx=nginx:1.17.1
+kubectl –n sbp describe po nginx
+kubectl –n sbp get po nginx -w # watch it
 </p>
 </details>
 
-### Check the Image version without the describe command​
+### Check the Image version without the describe command
 <details><summary>show</summary>
 <p>
-kubectl get po nginx -o jsonpath='{.spec.containers[].image}{"\n"}'​
-​</p>
-</details>
-
-### Get the IP Address of the pod you just created​
-<details><summary>show</summary>
-<p>
-kubectl get po nginx -o wide​
-kubectl get pod nginx -o jsonpath='{.status.podIP}'​
+kubectl get po nginx -o jsonpath='{.spec.containers[].image}{"\n"}'
 </p>
 </details>
 
-### Create a busy busybox pod that keeps running​
+### Get the IP Address of the pod you just created
 <details><summary>show</summary>
 <p>
-kubectl run busybox --image=busybox --restart=Never -- /bin/sh -c "sleep 3600"​
+kubectl get po nginx -o wide
+kubectl get pod nginx -o jsonpath='{.status.podIP}'
 </p>
 </details>
 
-### Check the connection of the nginx pod from the busybox pod​
+### Create a busy busybox pod that keeps running
 <details><summary>show</summary>
 <p>
-kubectl exec -it busybox -- wget -o- <IP Address>​
-kubectl run curl --image=curlimages/curl --restart=Never -it --rm -- sh -c "while true; do curl --connect-timeout 3 -I <POD_IP>:80 && sleep 1 ; done"​
-​</p>
-</details>
-
-### List the nginx pod with custom columns POD_NAME and POD_STATUS​
-<details><summary>show</summary>
-<p>
-kubectl get pod -o=custom-columns="POD_NAME:.metadata.name, POD_STATUS:.status.containerStatuses[].state"​
+kubectl run busybox --image=busybox --restart=Never -- /bin/sh -c "sleep 3600"
 </p>
 </details>
 
-### List all the pods sorted by name​
+### Check the connection of the nginx pod from the busybox pod
 <details><summary>show</summary>
 <p>
-kubectl get pods --sort-by=.metadata.name​
+kubectl exec -it busybox -- wget -o- <IP Address>
+kubectl run curl --image=curlimages/curl --restart=Never -it --rm -- sh -c "while true; do curl --connect-timeout 3 -I <POD_IP>:80 && sleep 1 ; done"
 </p>
 </details>
 
-### List all the pods sorted by created timestamp​
+### List the nginx pod with custom columns POD_NAME and POD_STATUS
 <details><summary>show</summary>
 <p>
-kubectl get pods--sort-by=.metadata.creationTimestamp​
+kubectl get pod -o=custom-columns="POD_NAME:.metadata.name, POD_STATUS:.status.containerStatuses[].state"
+</p>
+</details>
+
+### List all the pods sorted by name
+<details><summary>show</summary>
+<p>
+kubectl get pods --sort-by=.metadata.name
+</p>
+</details>
+
+### List all the pods sorted by created timestamp
+<details><summary>show</summary>
+<p>
+kubectl get pods--sort-by=.metadata.creationTimestamp
 </p>
 </details>
 
 
 # Multi-container Pods (10%)
-* Understand multi-container pod design patterns (eg: ambassador, adaptor, sidecar)​
+* Understand multi-container pod design patterns (eg: ambassador, adaptor, sidecar)
 * https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/
 
 
 # Question
 Create a Pod with three busy box containers with commands:
-* "ls; sleep 3600;"​
-* "echo Hello World; sleep 3600;"​
-* "echo this is the third container; sleep 3600"​
-respectively and check the status.​
-* Check the logs of each container that you just created​
+* "ls; sleep 3600;"
+* "echo Hello World; sleep 3600;"
+* "echo this is the third container; sleep 3600"
+respectively and check the status.
+* Check the logs of each container that you just created
 * Show metrics of the pod containers and puts them into file.log and verify
 
 <details><summary>show</summary>
 
-first create single container pod with dry run flag​
+first create single container pod with dry run flag
 
 ```sh
 
-kubectl run busybox --image=busybox --restart=Never --dry-run -o yaml -- bin/sh -c "sleep 3600; ls" > multi-container.yaml​
+kubectl run busybox --image=busybox --restart=Never --dry-run -o yaml -- bin/sh -c "sleep 3600; ls" > multi-container.yaml
 
 ```
 
-edit the pod to following yaml and create it​
+edit the pod to following yaml and create it
 
 ```yaml
 
-​apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: busybox​
-    name: busybox​
-spec:​
-  containers:​
-  - args:​
-    - bin/sh​
-    - -c​
-    - ls; sleep 3600​
-    image: busybox​
-    name: busybox1​
-    resources: {}​
-  - args:​
-    - bin/sh​
-    - -c​
-    - echo Hello world; sleep 3600​
-    image: busybox​
-    name: busybox2​
-    resources: {}​
-  - args:​
-    - bin/sh​
-    - -c​
-    - echo this is third container; sleep 3600​
-    image: busybox​
-    name: busybox3​
-    resources: {}​
-dnsPolicy: ClusterFirst​
-restartPolicy: Never​
-status: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: busybox
+    name: busybox
+spec:
+  containers:
+  - args:
+    - bin/sh
+    - -c
+    - ls; sleep 3600
+    image: busybox
+    name: busybox1
+    resources: {}
+  - args:
+    - bin/sh
+    - -c
+    - echo Hello world; sleep 3600
+    image: busybox
+    name: busybox2
+    resources: {}
+  - args:
+    - bin/sh
+    - -c
+    - echo this is third container; sleep 3600
+    image: busybox
+    name: busybox3
+    resources: {}
+dnsPolicy: ClusterFirst
+restartPolicy: Never
+status: {}
 
 ```
-​
+
 
 
 ```sh
-kubectl create -f multi-container.yaml​
-​
-kubectl get po busybox​
+kubectl create -f multi-container.yaml
+
+kubectl get po busybox
 ```
 
 </p>
@@ -430,105 +430,105 @@ kubectl get po busybox​
 
 
 # Question
-Create a Pod with main container image "busybox" and which executes the command:​
-* “while true; do echo ‘Hi I am from Main container’ >> /var/log/index.html; sleep 5; done” ​
-and with sidecar nginx container which exposes the container port 80.​
+Create a Pod with main container image "busybox" and which executes the command:
+* “while true; do echo ‘Hi I am from Main container’ >> /var/log/index.html; sleep 5; done” 
+and with sidecar nginx container which exposes the container port 80.
 
-Use emptyDir Volume and mount it on path:​
-* /var/log for busybox​
-* /usr/share/nginx/html for nginx ​
-Verify both containers are running.​
+Use emptyDir Volume and mount it on path:
+* /var/log for busybox
+* /usr/share/nginx/html for nginx 
+Verify both containers are running.
 
 <details><summary>show</summary>
 
 
-Create an initial yaml file with this​
+Create an initial yaml file with this
 
 ```sh
 
-kubectl run multi-cont-pod --image=busbox --restart=Never --dry-run -o yaml > multi-container.yaml​
+kubectl run multi-cont-pod --image=busbox --restart=Never --dry-run -o yaml > multi-container.yaml
 
-# Edit the yml as below and create it​
-kubectl create -f multi-container.yamlkubectl get po multi-cont-pod​
+# Edit the yml as below and create it
+kubectl create -f multi-container.yamlkubectl get po multi-cont-pod
 
 ```
 
 ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  name: multi-container-pod​
-spec:​
-  containers:​
-  - image: busybox​
-    name: busybox​
-    command:​
-    - sh​
-    - -c​
-    - while true; do echo ‘Hi I am from Main container’ >> /var/log/index.html; sleep 5; done;​
-    volumeMounts:​
-    - mountPath: /var/log​
-      name: empty-dir​
-  - image: nginx​
-    name: nginx​
-    volumeMounts:​
-    - mountPath: /usr/share/nginx/html​
-      name: empty-dir​
-  volumes:​
-  - name: empty-dir​
-    emptyDir: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-container-pod
+spec:
+  containers:
+  - image: busybox
+    name: busybox
+    command:
+    - sh
+    - -c
+    - while true; do echo ‘Hi I am from Main container’ >> /var/log/index.html; sleep 5; done;
+    volumeMounts:
+    - mountPath: /var/log
+      name: empty-dir
+  - image: nginx
+    name: nginx
+    volumeMounts:
+    - mountPath: /usr/share/nginx/html
+      name: empty-dir
+  volumes:
+  - name: empty-dir
+    emptyDir: {}
 ```
 </p>
 </details>
 
 # Question
-* Create a multi-container pod using a volume named html, type emptyDir (which means    that the volume is first created when a Pod is assigned to a node and exists as long as that Pod is running on that node). ​
-  * The 1st container runs nginx server and has the shared volume mounted to the directory /usr/share/nginx/html. ​
-  * The 2nd container uses a debian image and has the shared volume mounted to the directory /html. Every second, the 2nd container adds the current date and time into the index.html file, which is located in the shared volume. ​
+* Create a multi-container pod using a volume named html, type emptyDir (which means    that the volume is first created when a Pod is assigned to a node and exists as long as that Pod is running on that node). 
+  * The 1st container runs nginx server and has the shared volume mounted to the directory /usr/share/nginx/html. 
+  * The 2nd container uses a debian image and has the shared volume mounted to the directory /html. Every second, the 2nd container adds the current date and time into the index.html file, which is located in the shared volume. 
 
-Valide your solution​
+Valide your solution
 
 <details><summary>show</summary>
 <p>
 
 A standard use case for a multi-container Pod with a shared Volume is when one container writes logs or other files to the shared directory, and the other container reads from the shared directory. For example, we can create a Pod like so:
-​
+
 ```sh
 
-cat <<EOF | kubectl apply -f -​
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  name: mc1​
-spec:​
-  volumes:​
-  - name: html​
-    emptyDir: {}​
-  containers:​
-  - name: 1st​
-    image: nginx​
-    volumeMounts:​
-    - name: html​
-      mountPath: /usr/share/nginx/html​
-  - name: 2nd​
-    image: debian​
-    volumeMounts:​
-    - name: html​
-      mountPath: /html​
-    command: ["/bin/sh", "-c"]​
-    args:​
-      - while true; do​
-          date >> /html/index.html;​
-          sleep 1;​
-        done​
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mc1
+spec:
+  volumes:
+  - name: html
+    emptyDir: {}
+  containers:
+  - name: 1st
+    image: nginx
+    volumeMounts:
+    - name: html
+      mountPath: /usr/share/nginx/html
+  - name: 2nd
+    image: debian
+    volumeMounts:
+    - name: html
+      mountPath: /html
+    command: ["/bin/sh", "-c"]
+    args:
+      - while true; do
+          date >> /html/index.html;
+          sleep 1;
+        done
 
-EOF​
+EOF
 ```
-​
 
-In this example, we define a volume named html. Its type is emptyDir, which means that the volume is first created when a Pod is assigned to a node, and exists as long as that Pod is running on that node. As the name says, it is initially empty. The 1st container runs nginx server and has the shared volume mounted to the directory /usr/share/nginx/html. The 2nd container uses the Debian image and has the shared volume mounted to the directory /html. Every second, the 2nd container adds the current date and time into the index.html file, which is located in the shared volume. When the user makes an HTTP request to the Pod, the Nginx server reads this file and transfers it back to the user in response to the request.​
 
-​</p>
+In this example, we define a volume named html. Its type is emptyDir, which means that the volume is first created when a Pod is assigned to a node, and exists as long as that Pod is running on that node. As the name says, it is initially empty. The 1st container runs nginx server and has the shared volume mounted to the directory /usr/share/nginx/html. The 2nd container uses the Debian image and has the shared volume mounted to the directory /html. Every second, the 2nd container adds the current date and time into the index.html file, which is located in the shared volume. When the user makes an HTTP request to the Pod, the Nginx server reads this file and transfers it back to the user in response to the request.
+
+</p>
 </details>
 
 
@@ -543,213 +543,213 @@ In this example, we define a volume named html. Its type is emptyDir, which mean
 
 ```yaml
 ---
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  name: init-container-test​
-spec:​
-  containers:​
-  - name: application-container​
-    image: alpine​
-    command: ['sh', '-c', 'if [ -f /work/sharedfile.txt ]; then sleep 99999; else exit; fi']​
-    volumeMounts:​
-      - name: workdir-volume​
-        mountPath: /work​
-  initContainers:​
-  - name: init-container​
-    image: busybox:1.28​
-    command: ['sh', '-c', 'mkdir /work; echo>/work/sharedfile.txt']​
-    volumeMounts:​
-    - name: workdir-volume​
-      mountPath: /work​
-  volumes:​
-  - name: workdir-volume​
-    emptyDir: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-container-test
+spec:
+  containers:
+  - name: application-container
+    image: alpine
+    command: ['sh', '-c', 'if [ -f /work/sharedfile.txt ]; then sleep 99999; else exit; fi']
+    volumeMounts:
+      - name: workdir-volume
+        mountPath: /work
+  initContainers:
+  - name: init-container
+    image: busybox:1.28
+    command: ['sh', '-c', 'mkdir /work; echo>/work/sharedfile.txt']
+    volumeMounts:
+    - name: workdir-volume
+      mountPath: /work
+  volumes:
+  - name: workdir-volume
+    emptyDir: {}
 
 ```
-​</p>
+</p>
 </details>
 
 
-# Pod Design (20%)​
+# Pod Design (20%)
 
-* Understand how to use Labels, Selectors and Annotations​
-  * https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/​
-  * https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/​
+* Understand how to use Labels, Selectors and Annotations
+  * https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  * https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 
-* Understand Deployments, rolling updates and rollbacks​
-  * https://kubernetes.io/docs/concepts/workloads/controllers/deployment/​
+* Understand Deployments, rolling updates and rollbacks
+  * https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 
-* Understand Jobs and CronJobs​
-  * https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/​
+* Understand Jobs and CronJobs
+  * https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
   * https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
 
 
 # Questions
 
-* Create 6 nginx pods in which two of them are labeled env=prod, another two are labeled env=acc, and the last two are labeled env=dev​
+* Create 6 nginx pods in which two of them are labeled env=prod, another two are labeled env=acc, and the last two are labeled env=dev
 
 <details><summary>show</summary>
 
 ```sh 
-kubectl run nginx-dev1 --image=nginx --restart=Never --labels=env=dev​
-kubectl run nginx-dev2 --image=nginx --restart=Never --labels=env=dev​
-kubectl run nginx-acc1 --image=nginx --restart=Never --labels=env=acc​
-kubectl run nginx-acc2 --image=nginx --restart=Never --labels=env=acc​
-kubectl run nginx-prod1 --image=nginx --restart=Never --labels=env=prod​
-kubectl run nginx-prod2 --image=nginx --restart=Never --labels=env=prod​
+kubectl run nginx-dev1 --image=nginx --restart=Never --labels=env=dev
+kubectl run nginx-dev2 --image=nginx --restart=Never --labels=env=dev
+kubectl run nginx-acc1 --image=nginx --restart=Never --labels=env=acc
+kubectl run nginx-acc2 --image=nginx --restart=Never --labels=env=acc
+kubectl run nginx-prod1 --image=nginx --restart=Never --labels=env=prod
+kubectl run nginx-prod2 --image=nginx --restart=Never --labels=env=prod
 ```
-​​</p>
+</p>
 </details>
 
-* Verify all the pods are created with correct labels​
+* Verify all the pods are created with correct labels
 
 <details><summary>show</summary>
 
 ```sh 
-kubeclt get pods --show-labels​
+kubeclt get pods --show-labels
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Get the pods with label env=acc​
+* Get the pods with label env=acc
 <details><summary>show</summary>
 
 ```sh 
-kubectl get pods -l env=acc​
+kubectl get pods -l env=acc
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Get the pods with label env​
+* Get the pods with label env
 <details><summary>show</summary>
 
 ```sh 
-kubectl get pods -L env​
+kubectl get pods -L env
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Get the pods with labels env=dev and env=prod and output the labels as well​
+* Get the pods with labels env=dev and env=prod and output the labels as well
 <details><summary>show</summary>
 
 ```sh 
-kubectl get pods -l 'env in (dev,prod)' --show-labels​
+kubectl get pods -l 'env in (dev,prod)' --show-labels
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Change the label for one of the pod to env=uat and list all the pods to verify​
+* Change the label for one of the pod to env=uat and list all the pods to verify
 <details><summary>show</summary>
 
 
 ```sh 
-kubectl label pod/nginx-dev2 env=uat --overwrite​
+kubectl label pod/nginx-dev2 env=uat --overwrite
 
-kubectl get pods --show-labels​
+kubectl get pods --show-labels
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Remove the labels for the pods that we created now and verify all the labels are removed​
-<details><summary>show</summary>
-<p>
-
-```sh 
-kubectl label pod nginx-dev{1..2} env-​
-
-kubectl label pod nginx-acc{1..2} env-​
-
-kubectl label pod nginx-prod{1..2} env-​
-
-kubectl get po --show-labels​
-```
-​​</p>
-</details>
- ​
-
-* Let’s add the label app=nginx for all the pods and verify​
+* Remove the labels for the pods that we created now and verify all the labels are removed
 <details><summary>show</summary>
 <p>
 
 ```sh 
-kubectl label pod nginx-dev{1..2} app=nginx​
+kubectl label pod nginx-dev{1..2} env-
 
-kubectl label pod nginx-acc{1..2} app=nginx​
+kubectl label pod nginx-acc{1..2} env-
 
-kubectl label pod nginx-prod{1..2} app=nginx​
+kubectl label pod nginx-prod{1..2} env-
 
-kubectl get po --show-labels​
+kubectl get po --show-labels
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
- ​
-
-* Get all the nodes with labels ​
+* Let’s add the label app=nginx for all the pods and verify
 <details><summary>show</summary>
 <p>
 
 ```sh 
-kubectl get nodes --show-labels​
-```
-​​</p>
-</details>
- ​
+kubectl label pod nginx-dev{1..2} app=nginx
 
-* Label the node nodeName=nginxnode​
+kubectl label pod nginx-acc{1..2} app=nginx
+
+kubectl label pod nginx-prod{1..2} app=nginx
+
+kubectl get po --show-labels
+```
+</p>
+</details>
+ 
+
+ 
+
+* Get all the nodes with labels 
 <details><summary>show</summary>
 <p>
 
 ```sh 
-kubectl label node <nodename> nodeName=nginxnode​
+kubectl get nodes --show-labels
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Create a Pod that will be deployed on this node with the label nodeName=nginxnode​
+* Label the node nodeName=nginxnode
+<details><summary>show</summary>
+<p>
+
+```sh 
+kubectl label node <nodename> nodeName=nginxnode
+```
+</p>
+</details>
+ 
+
+* Create a Pod that will be deployed on this node with the label nodeName=nginxnode
 
 <details><summary>show</summary>
 <p>
 
 ```sh
-kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > pod.yaml​
+kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > pod.yaml
 ```
 
-Add the nodeSelector like below and create the pod​ ​
+Add the nodeSelector like below and create the pod 
 
 ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: nginx​
-  name: nginx​
-spec:​
-  nodeSelector:​
-    nodeName: nginxnode​
-  containers:​
-  - image: nginx​
-    name: nginx​
-    resources: {}​
-  dnsPolicy: ClusterFirst​
-  restartPolicy: Never​
-status: {}​
-``` ​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  nodeSelector:
+    nodeName: nginxnode
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+``` 
 
 ```sh
-kubectl create -f pod.yaml​
+kubectl create -f pod.yaml
 
 ```
-​​</p>
+</p>
 </details>
 
 
@@ -757,65 +757,65 @@ kubectl create -f pod.yaml​
 
 
 
-​
 
-* Get all the nodes with labels ​
+
+* Get all the nodes with labels 
 <details><summary>show</summary>
 <p>
 
 ```sh
-kubectl get nodes --show-labels​
+kubectl get nodes --show-labels
 ```
-​​</p>
+</p>
 </details>
 
-Label the node nodeName=nginxnode​
+Label the node nodeName=nginxnode
 
 ```sh 
-kubectl label node <nodename> nodeName=nginxnode​
+kubectl label node <nodename> nodeName=nginxnode
 ```
-​​</p>
+</p>
 </details>
 
- ​
+ 
 
-* Create a Pod that will be deployed on this node with the label nodeName=nginxnode​
+* Create a Pod that will be deployed on this node with the label nodeName=nginxnode
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > pod.yaml​
+kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > pod.yaml
 ```
 
-Add the nodeSelector like below and create the pod​
+Add the nodeSelector like below and create the pod
 
- ​
+ 
 ```yaml
 
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: nginx​
-  name: nginx​
-spec:​
-  nodeSelector:​
-    nodeName: nginxnode​
-  containers:​
-  - image: nginx​
-    name: nginx​
-    resources: {}​
-  dnsPolicy: ClusterFirst​
-  restartPolicy: Never​
-status: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  nodeSelector:
+    nodeName: nginxnode
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
 ```
 
 ```sh
-kubectl create -f pod.yaml​
+kubectl create -f pod.yaml
 ```
-​​</p>
+</p>
 </details>
 
 
@@ -825,315 +825,315 @@ kubectl create -f pod.yaml​
 
 
 
- ​
+ 
 
-* Create a deployment called webapp with image nginx:1.17.1 with 5 replicas​
+* Create a deployment called webapp with image nginx:1.17.1 with 5 replicas
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl create deployment webapp --image=nginx​
+kubectl create deployment webapp --image=nginx
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
- ​
+ 
 
-* Get the pods of this deployment and their labels​
+* Get the pods of this deployment and their labels
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-// get the label of the deployment​
+// get the label of the deployment
 
-kubectl get deploy --show-labels​
+kubectl get deploy --show-labels
 
-// get the pods with that label​
+// get the pods with that label
 
-kubectl get pods -l app=webapp​
+kubectl get pods -l app=webapp
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Scale the deployment from 5 replicas to 10 replicas and verify​
+* Scale the deployment from 5 replicas to 10 replicas and verify
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl scale deploy webapp --replicas=10​
+kubectl scale deploy webapp --replicas=10
 
-kubectl get po -l app=webapp​
+kubectl get po -l app=webapp
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Get the deployment rollout status​
+* Get the deployment rollout status
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl rollout status deploy webapp​
+kubectl rollout status deploy webapp
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Get the replicaset that created with this deployment​
+* Get the replicaset that created with this deployment
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl get rs -l app=webapp​
+kubectl get rs -l app=webapp
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Get the yaml of the replicaset and pods of this deployment​
+* Get the yaml of the replicaset and pods of this deployment
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
- ​
+ 
 
-kubectl get rs -l app=webapp -o yaml​
+kubectl get rs -l app=webapp -o yaml
 
-kubectl get po -l app=webapp -o yaml​
+kubectl get po -l app=webapp -o yaml
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
- ​
+ 
 
-* Update the deployment with the image version 1.17.4 and verify​
+* Update the deployment with the image version 1.17.4 and verify
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl set image deploy/webapp nginx=nginx:1.17.4​
+kubectl set image deploy/webapp nginx=nginx:1.17.4
 
-kubectl describe deploy webapp | grep Image​
+kubectl describe deploy webapp | grep Image
 
 ```
-​​</p>
+</p>
 </details>
 
- ​
+ 
 
-* Check the rollout history and make sure everything is ok after the update​
+* Check the rollout history and make sure everything is ok after the update
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl rollout history deploy webapp​
+kubectl rollout history deploy webapp
 
-kubectl get deploy webapp --show-labels​
+kubectl get deploy webapp --show-labels
 
-kubectl get rs -l app=webapp​
+kubectl get rs -l app=webapp
 
-kubectl get po -l app=webapp​
+kubectl get po -l app=webapp
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
- ​
+ 
 
-* Undo the deployment to the previous version 1.17.1 and verify Image has the previous version​
+* Undo the deployment to the previous version 1.17.1 and verify Image has the previous version
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl rollout undo deploy webapp​
+kubectl rollout undo deploy webapp
 
-kubectl describe deploy webapp | grep Image​
+kubectl describe deploy webapp | grep Image
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Update the deployment with the wrong image version 1.100 and verify something is wrong with the deployment​
+* Update the deployment with the wrong image version 1.100 and verify something is wrong with the deployment
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl set image deploy/webapp nginx=nginx:1.100​
+kubectl set image deploy/webapp nginx=nginx:1.100
 
-kubectl rollout status deploy webapp (still pending state)​
+kubectl rollout status deploy webapp (still pending state)
 
-kubectl get pods (ImagePullErr)​
+kubectl get pods (ImagePullErr)
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
-* Undo the deployment with the previous version and verify everything is Ok​
+* Undo the deployment with the previous version and verify everything is Ok
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl rollout undo deploy webapp​
+kubectl rollout undo deploy webapp
 
-kubectl rollout status deploy webapp​
+kubectl rollout status deploy webapp
 
-kubectl get pods​
+kubectl get pods
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
- ​
+ 
 
-* Apply the autoscaling to this deployment with minimum 10 and maximum 20 replicas and target CPU of 85% and verify hpa is created and replicas are increased to 10 from 1​
+* Apply the autoscaling to this deployment with minimum 10 and maximum 20 replicas and target CPU of 85% and verify hpa is created and replicas are increased to 10 from 1
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl autoscale deploy webapp --min=10 --max=20 --cpu-percent=85​
+kubectl autoscale deploy webapp --min=10 --max=20 --cpu-percent=85
 
-kubectl get hpa​
+kubectl get hpa
 
-kubectl get pod -l app=webapp​
+kubectl get pod -l app=webapp
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
- ​
+ 
 
-* Clean Up​
+* Clean Up
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl delete deploy webapp​
+kubectl delete deploy webapp
 
-kubectl delete hpa webapp​
+kubectl delete hpa webapp
 ```
-​​</p>
+</p>
 </details>
-​
 
-* Create a job with an image of busybox which echos “Hello I am from job” and make it run 10 times one after one​
+
+* Create a job with an image of busybox which echos “Hello I am from job” and make it run 10 times one after one
 <details><summary>show</summary>
 <p>
 
 
-```sh  ​
-kubectl create job hello-job --image=busybox --dry-run -o yaml -- echo "Hello I am from job" > hello-job.yaml​
+```sh  
+kubectl create job hello-job --image=busybox --dry-run -o yaml -- echo "Hello I am from job" > hello-job.yaml
 ```
-edit the yaml file to add completions: 10​
+edit the yaml file to add completions: 10
 
 ```yaml
-apiVersion: batch/v1​
-kind: Job​
-metadata:​
-  creationTimestamp: null​
-  name: hello-job​
-spec:​
-  completions: 10​
-  template:​
-    metadata:​
-      creationTimestamp: null​
-    spec:​
-      containers:​
-      - command:​
-        - echo​
-        - Hello I am from job​
-        image: busybox​
-        name: hello-job​
-        resources: {}​
-      restartPolicy: Never​
-status: {}​
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: hello-job
+spec:
+  completions: 10
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - echo
+        - Hello I am from job
+        image: busybox
+        name: hello-job
+        resources: {}
+      restartPolicy: Never
+status: {}
 ```
- ​
+ 
 ```sh
-kubectl create -f hello-job.yaml​
+kubectl create -f hello-job.yaml
 ```
- ​
+ 
 
- ​
+ 
 
- ​
+ 
 
-* Watch the job that runs 10 times one by one and verify 10 pods are created and delete those after it’s completed​
+* Watch the job that runs 10 times one by one and verify 10 pods are created and delete those after it’s completed
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl get job -w​
+kubectl get job -w
 
-kubectl get po​
+kubectl get po
 
-kubectl delete job hello-job​
+kubectl delete job hello-job
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
- ​
+ 
 
-* Create the same job and make it run 10 times parallel​
+* Create the same job and make it run 10 times parallel
 <details><summary>show</summary>
 <p>
 
 
 ```yaml
-apiVersion: batch/v1​
-kind: Job​
-metadata:​
-  creationTimestamp: null​
-  name: hello-job​
-spec:​
-  parallelism: 10​
-  template:​
-    metadata:​
-      creationTimestamp: null​
-    spec:​
-      containers:​
-      - command:​
-        - echo​
-        - Hello I am from job​
-        image: busybox​
-        name: hello-job​
-        resources: {}​
-      restartPolicy: Never​
-status: {}​
+apiVersion: batch/v1
+kind: Job
+metadata:
+  creationTimestamp: null
+  name: hello-job
+spec:
+  parallelism: 10
+  template:
+    metadata:
+      creationTimestamp: null
+    spec:
+      containers:
+      - command:
+        - echo
+        - Hello I am from job
+        image: busybox
+        name: hello-job
+        resources: {}
+      restartPolicy: Never
+status: {}
 ```
-​​</p>
+</p>
 </details>
- ​
+ 
 
- ​
+ 
 
-* Create a Cronjob with busybox image that prints date and hello from kubernetes cluster message for every minute​
+* Create a Cronjob with busybox image that prints date and hello from kubernetes cluster message for every minute
 <details><summary>show</summary>
 <p>
 
 
 ```sh 
-kubectl create cronjob date-job --image=busybox --schedule="*/1 * * * *" -- bin/sh -c "date; echo Hello from kubernetes cluster"​
+kubectl create cronjob date-job --image=busybox --schedule="*/1 * * * *" -- bin/sh -c "date; echo Hello from kubernetes cluster"
 
 ```
-​​</p>
+</p>
 </details>
 
 
@@ -1141,36 +1141,36 @@ kubectl create cronjob date-job --image=busybox --schedule="*/1 * * * *" -- bin/
 
 ## State Persistence
 
-https://kubernetes.io/docs/concepts/storage/volumes/#emptydir​
+https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
 
-https://kubernetes.io/docs/concepts/storage/persistent-volumes/​
+https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 
 https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
 
 
 ### EmptyDir
-- Scratch space​
-- Checkpoint a long computation for recovery​
-- Log processing​
+- Scratch space
+- Checkpoint a long computation for recovery
+- Log processing
 - Fetch files from content manager for web container
 
 <details><summary>show</summary>
 
 ```yaml
 
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  name: test-pd​
-spec:​
-  containers:​
-  - image: k8s.gcr.io/test-webserver​
-    name: test-container​
-    volumeMounts:​
-    - mountPath: /cache​
-      name: cache-volume​
-  volumes:​
-  - name: cache-volume​
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pd
+spec:
+  containers:
+  - image: k8s.gcr.io/test-webserver
+    name: test-container
+    volumeMounts:
+    - mountPath: /cache
+      name: cache-volume
+  volumes:
+  - name: cache-volume
     emptyDir: {}
 ```
 
@@ -1178,24 +1178,24 @@ spec:​
 
 
 ### Persistent Volumes
-- Piece of storage in the cluster​
-- Provisioned with Storage classes​
-- Lifecycle independent of pods​
+- Piece of storage in the cluster
+- Provisioned with Storage classes
+- Lifecycle independent of pods
 
 <details><summary>show</summary>
 
 ```yaml
-kind: PersistentVolume​
-apiVersion: v1​
-metadata:​
-  name: my-pv​
-spec:​
-  storageClassName: local-storage​
-  capacity:​
-    storage: 1Gi​
-  accessModes:​
-    - ReadWriteOnce​
-  hostPath:​
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: my-pv
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
     path: "/mnt/data"
 ```
 </details>
@@ -1203,43 +1203,43 @@ spec:​
 
 
 ### Persistent Volumes Claims
-- Request for storage by a user​
-- Pods comsume node resources, PVC consume PV resources​
+- Request for storage by a user
+- Pods comsume node resources, PVC consume PV resources
 - Claims can request specific size, acess mode and storage class
 
 
 <details><summary>show</summary>
 
 ```yaml
-apiVersion: v1​
-kind: PersistentVolumeClaim​
-metadata:​
-  name: my-pvc​
-spec:​
-  storageClassName: local-storage​
-  accessModes:​
-    - ReadWriteOnce​
-  resources:​
-    requests:​
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
       storage: 512Mi
 ```
 
 ```yaml
-kind: Pod​
-apiVersion: v1​
-metadata:​
-  name: my-pvc-pod​
-spec:​
-  containers:​
-  - name: busybox​
-    image: busybox​
-    command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]​
-    volumeMounts:​
-    - mountPath: "/mnt/storage"​
-      name: my-storage​
-  volumes:​
-  - name: my-storage​
-    persistentVolumeClaim:​
+kind: Pod
+apiVersion: v1
+metadata:
+  name: my-pvc-pod
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+    volumeMounts:
+    - mountPath: "/mnt/storage"
+      name: my-storage
+  volumes:
+  - name: my-storage
+    persistentVolumeClaim:
       claimName: my-pvc
 ```
 
@@ -1251,27 +1251,27 @@ spec:​
 
 ### Lab-01
 
-- Create a "busybox" pod with a simple emptyDir volume, named "my-volume", to the container at the path "/tmp/storage"​
+- Create a "busybox" pod with a simple emptyDir volume, named "my-volume", to the container at the path "/tmp/storage"
 
 
 <details><summary>show</summary>
 
 ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  name: volume-pod​
-spec:​
-  containers:​
-  - image: busybox​
-    name: busybox​
-    command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]​
-    volumeMounts:​
-    - mountPath: /tmp/storage​
-      name: my-volume​
-  volumes:​
-  - name: my-volume​
-    emptyDir: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-pod
+spec:
+  containers:
+  - image: busybox
+    name: busybox
+    command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+    volumeMounts:
+    - mountPath: /tmp/storage
+      name: my-volume
+  volumes:
+  - name: my-volume
+    emptyDir: {}
 ```
 </details>
 
@@ -1279,25 +1279,25 @@ spec:​
 
 ### Lab-02
 
-- Create a "hostPath" type persistent volume named "mysql-pv", of size "1Gi" and access mode "ReadWriteOnce"​
+- Create a "hostPath" type persistent volume named "mysql-pv", of size "1Gi" and access mode "ReadWriteOnce"
 
 <details><summary>show</summary>
 
 ```yaml
-apiVersion: v1​
-kind: PersistentVolume​
-metadata:​
-  name: mysql-pv​
-spec:​
-  storageClassName: localdisk​
-  capacity:​
-    storage: 1Gi​
-    accessModes:​
-      - ReadWriteOnce ​
-  hostPath: ​
-    path: "/mnt/data"​
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  storageClassName: localdisk
+  capacity:
+    storage: 1Gi
+    accessModes:
+      - ReadWriteOnce 
+  hostPath: 
+    path: "/mnt/data"
 ```
-​</details>
+</details>
 
 
 - Create a persistent volume claim named "mysql-pv-claim", of size "500Mi", access mode "ReadWriteOnce" and storage class name "localdisk"
@@ -1305,16 +1305,16 @@ spec:​
 <details><summary>show</summary>
 
 ```yaml
-apiVersion: v1​
-kind: PersistentVolumeClaim​
-metadata:​
-  name: mysql-pv-claim​
-spec:​
-  storageClassName: localdisk​
-  accessModes:​
-    - ReadWriteOnce​
-  resources:​
-    requests:​
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  storageClassName: localdisk
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
       storage: 500Mi
 ```
 
@@ -1323,134 +1323,134 @@ spec:​
 
 ## Configurations
 
-- Understand ConfigMaps​
-https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/​
+- Understand ConfigMaps
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
 
-- Understand SecurityContexts​
-https://kubernetes.io/docs/tasks/configure-pod-container/security-context/​
+- Understand SecurityContexts
+https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 
-- Define an application's resource requirements​
-https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/​
+- Define an application's resource requirements
+https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 
-- Create and consume secrets​
-https://kubernetes.io/docs/concepts/configuration/secret/​
+- Create and consume secrets
+https://kubernetes.io/docs/concepts/configuration/secret/
 
-- Understand service accounts​
+- Understand service accounts
 https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 
 
 ### Exercises
 
 ### Lab-01
-- Create a configmap in the namespace sbp called sbp-config with literal value appname=philis​
-- Verify that the configmap we just created is correct.​
+- Create a configmap in the namespace sbp called sbp-config with literal value appname=philis
+- Verify that the configmap we just created is correct.
 - Delete the configmap we just created
 
 <details><summary>show</summary>
 
 
 ```sh
-# kubectl -n sbp create cm sbp-config --from-literal=appname=philis​
-# kubectl -n sbp get cm sbp-config -o yaml;      ​
-# kubectl -n sbp describe cm sbp-config​
-# kubectl -n sbp delete cm sbp-config​
+# kubectl -n sbp create cm sbp-config --from-literal=appname=philis
+# kubectl -n sbp get cm sbp-config -o yaml;      
+# kubectl -n sbp describe cm sbp-config
+# kubectl -n sbp delete cm sbp-config
 ```
 </details>
 
 
 ### Lab-02
-- Create a configmap with two values key1=schuberg and key2=philis in the namespace sbp named sbp-config and verify that configmap is created correctly​
+- Create a configmap with two values key1=schuberg and key2=philis in the namespace sbp named sbp-config and verify that configmap is created correctly
 - Create an nginx pod and load environment values from the above configmap sbp-config and exec into the pod and verify the environment variables and delete the pod
 
 <details><summary>show</summary>
 
 ```sh
-# cat >> config.txt << EOF​
-key1=schuberg​
-key2=philis​
-EOF​
+# cat >> config.txt << EOF
+key1=schuberg
+key2=philis
+EOF
 
-# kubectl -n sbp create configmap sbp-config --from-file=config.txt​
-# kubectl -n sbp create configmap sbp-config --from-literal=key1=value1 --from-literal=key2=value2​
-# kubectl -n sbp get cm sbp-config -o yaml​
-# kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx-pod.yml​
+# kubectl -n sbp create configmap sbp-config --from-file=config.txt
+# kubectl -n sbp create configmap sbp-config --from-literal=key1=value1 --from-literal=key2=value2
+# kubectl -n sbp get cm sbp-config -o yaml
+# kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx-pod.yml
 ```
 
-- Edit the yml to below file and create​
+- Edit the yml to below file and create
 
 ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: nginx​
-  name: nginx​
-spec:​
-  containers:​
-  - image: nginx​
-    name: nginx​
-    resources: {}​
-    envFrom:​
-    - configMapRef:​
-        name: sbp-config​
-  dnsPolicy: ClusterFirst​
-  restartPolicy: Never​
-status: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+    envFrom:
+    - configMapRef:
+        name: sbp-config
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
 ```
 
 ```sh
-# kubectl -n sbp create -f nginx-pod.yml​
-# kubectl -n sbp exec -it nginx -- env​
-#kubectl -n sbp delete po nginx​
+# kubectl -n sbp create -f nginx-pod.yml
+# kubectl -n sbp exec -it nginx -- env
+#kubectl -n sbp delete po nginx
 ```
 </details>
 
 
 ### Lab-03
-- Create an env file sbp.env with var1=val1 and create a configmap sbp-config from this env file and verify the configmap​
+- Create an env file sbp.env with var1=val1 and create a configmap sbp-config from this env file and verify the configmap
 - Create an nginx pod and load environment values from the above configmap envcfgmap and exec into the pod and verify the environment variables and delete the pod
 
 <details><summary>show</summary>
 
 ```sh
-# echo var1=val1 > sbp.env​
-# cat sbp.env​
-# kubectl -n sbp create configmap sbp-config --from-env-file=sbp.env​
-# kubectl -n sbp get configmap sbp-config -o yaml --export​
-# kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx-pod.yml​
+# echo var1=val1 > sbp.env
+# cat sbp.env
+# kubectl -n sbp create configmap sbp-config --from-env-file=sbp.env
+# kubectl -n sbp get configmap sbp-config -o yaml --export
+# kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx-pod.yml
 ```
 
-- Edit the yml to below file and create​
+- Edit the yml to below file and create
 
 ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: nginx​
-  name: nginx​
-spec:​
-  containers:​
-  - image: nginx​
-    name: nginx​
-    resources: {}​
-    env:​
-    - name: ENVIRONMENT​
-      valueFrom:​
-        configMapKeyRef:​
-          name: sbp-config​
-          key: var1​
-  dnsPolicy: ClusterFirst​
-  restartPolicy: Never​
-status: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+    env:
+    - name: ENVIRONMENT
+      valueFrom:
+        configMapKeyRef:
+          name: sbp-config
+          key: var1
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
 ```
 
 ```sh
-# kubectl create -f nginx-pod.yml​
-# kubectl exec -it nginx -- env​
-# kubectl delete po nginx​
+# kubectl create -f nginx-pod.yml
+# kubectl exec -it nginx -- env
+# kubectl delete po nginx
 ```
 
 </details>
@@ -1458,230 +1458,230 @@ status: {}​
 
 
 ### Lab-04
-- Create a configmap called sbp-config in the namespace sbp with values var1=schuberg, var2=philis and create an nginx pod with volume nginx-volume which reads data from this configmap sbp-config and put it on the path /etc/cfg​
-- Create a pod called sbp-sleep with the image busybox which executes command sleep 3600 and makes sure any Containers in the Pod, all processes run with user ID 1000 and with group id 2000 and verify.​
+- Create a configmap called sbp-config in the namespace sbp with values var1=schuberg, var2=philis and create an nginx pod with volume nginx-volume which reads data from this configmap sbp-config and put it on the path /etc/cfg
+- Create a pod called sbp-sleep with the image busybox which executes command sleep 3600 and makes sure any Containers in the Pod, all processes run with user ID 1000 and with group id 2000 and verify.
 - Create the same pod as above this time set the securityContext for the container as well and verify that the securityContext of container overrides the Pod level securityContext.
 
 
 <details><summary>show</summary>
 
 ```sh
-# kubectl config set-context --current --namespace=sbp​
-# kubectl create cm sbp-config --from-literal=var1=schuberg --from-literal=var2=philis​
-# kubectl describe cm sbp-config​
+# kubectl config set-context --current --namespace=sbp
+# kubectl create cm sbp-config --from-literal=var1=schuberg --from-literal=var2=philis
+# kubectl describe cm sbp-config
 ```
 
-- Create the nginx pod with volume​
+- Create the nginx pod with volume
 
 ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: nginx​
-  name: nginx​
-spec:​
-  volumes:​
-  - name: nginx-volume​
-    configMap:​
-      name: sbp-config​
-  containers:​
-  - image: nginx​
-    name: nginx​
-    resources: {}​
-    volumeMounts:​
-    - name: nginx-volume​
-      mountPath: /etc/cfg​
-  dnsPolicy: ClusterFirst​
-  restartPolicy: Never​
-status: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  volumes:
+  - name: nginx-volume
+    configMap:
+      name: sbp-config
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+    volumeMounts:
+    - name: nginx-volume
+      mountPath: /etc/cfg
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
 ```
 
 ```sh
-# kubectl create -f nginx-volume.yml​
-# kubectl exec -it nginx -- /bin/sh​
-# cd /etc/cfg​
-# ls​
-# kubectl run sbp-sleep --image=busybox --restart=Never --dry-run -o yaml -- /bin/sh -c "sleep 3600;" > sbp-sleep.yml​
+# kubectl create -f nginx-volume.yml
+# kubectl exec -it nginx -- /bin/sh
+# cd /etc/cfg
+# ls
+# kubectl run sbp-sleep --image=busybox --restart=Never --dry-run -o yaml -- /bin/sh -c "sleep 3600;" > sbp-sleep.yml
 ```
 
-- Edit the pod like below and create​
+- Edit the pod like below and create
 
- ​
+ 
 ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: sbp-sleep​
-  name: sbp-sleep​
-spec:​
-  securityContext: # add security context​
-    runAsUser: 1000​
-    runAsGroup: 2000​
-  containers:​
-  - args:​
-    - /bin/sh​
-    - -c​
-    - sleep 3600;​
-    image: busybox​
-    name: sbp-sleep​
-    resources: {}​
-  dnsPolicy: ClusterFirst​
-  restartPolicy: Never​
-status: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: sbp-sleep
+  name: sbp-sleep
+spec:
+  securityContext: # add security context
+    runAsUser: 1000
+    runAsGroup: 2000
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - sleep 3600;
+    image: busybox
+    name: sbp-sleep
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
 ```
  
 ```sh 
-# kubectl create -f sbp-sleep.yml​
-# kubectl exec -it sbp-sleep – sh id ​
+# kubectl create -f sbp-sleep.yml
+# kubectl exec -it sbp-sleep – sh id 
 ```
 
-- Create the same pod as above this time set the securityContext for the container as well and verify that the securityContext of container overrides the Pod level securityContext.​
+- Create the same pod as above this time set the securityContext for the container as well and verify that the securityContext of container overrides the Pod level securityContext.
 
  ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: sbp-sleep​
-  name: sbp-sleep​
-spec:​
-  securityContext:​
-    runAsUser: 1000​
-  containers:​
-  - args:​
-    - /bin/sh​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: sbp-sleep
+  name: sbp-sleep
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+  - args:
+    - /bin/sh
     - -c
-    - sleep 3600;​
-    image: busybox​
-    securityContext:​
-      runAsUser: 2000​
-    name: sbp-sleep​
-    resources: {}​
-  dnsPolicy: ClusterFirst​
-  restartPolicy: Never​
-status: {}​
+    - sleep 3600;
+    image: busybox
+    securityContext:
+      runAsUser: 2000
+    name: sbp-sleep
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
 ```
 
 ```sh
-# kubectl create -f sbp-sleep.yml​
-# kubectl exec -it sbp-sleep -- sh id ​
+# kubectl create -f sbp-sleep.yml
+# kubectl exec -it sbp-sleep -- sh id 
 ```
 </details>
 
 
 
 ### Lab-05
-- Create a Pod nginx and specify a memory request and a memory limit of 100Gi and 200Gi respectively which is too big for the nodes and verify pod fails to start because of insufficient memory​
-- Create a secret mysecret with values user=myuser and password=mypassword​
-- Create an nginx pod which reads username as the environment variable​
+- Create a Pod nginx and specify a memory request and a memory limit of 100Gi and 200Gi respectively which is too big for the nodes and verify pod fails to start because of insufficient memory
+- Create a secret mysecret with values user=myuser and password=mypassword
+- Create an nginx pod which reads username as the environment variable
 - Create a service account called admin
 - Create a busybox pod which executes this command sleep 3600 with the service account admin and verify
 
 <details><summary>show</summary>
 
 ```sh
-# kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx.yml​
+# kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx.yml
 ```
 
-- Add the resources section and create​
+- Add the resources section and create
 
 ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: nginx​
-  name: nginx​
-spec:​
-  containers:​
-  - image: nginx​
-    name: nginx​
-    resources:​
-      requests:​
-        memory: "100Gi"​
-        cpu: "0.5"​
-      limits:​
-        memory: "200Gi"​
-        cpu: "1"​
-  dnsPolicy: ClusterFirst​
-  restartPolicy: Never​
-status: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    resources:
+      requests:
+        memory: "100Gi"
+        cpu: "0.5"
+      limits:
+        memory: "200Gi"
+        cpu: "1"
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
 ```
 
 ```sh
-# kubectl create -f nginx.yml​
-# kubectl describe po nginx ​
+# kubectl create -f nginx.yml
+# kubectl describe po nginx 
 ```
-​
-- Create a secret mysecret with values user=myuser and password=mypassword​
+
+- Create a secret mysecret with values user=myuser and password=mypassword
 
 ```sh
-#kubectl create secret generic my-secret --from-literal=username=user --from-literal=password=mypassword​
-# kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx.yml​
+#kubectl create secret generic my-secret --from-literal=username=user --from-literal=password=mypassword
+# kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > nginx.yml
 ```
 
-- Add env section below and create​
+- Add env section below and create
 
 ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: nginx​
-  name: nginx​
-spec:​
-  containers:​
-  - image: nginx​
-    name: nginx​
-    env:​
-    - name: USER_NAME​
-      valueFrom:​
-        secretKeyRef:​
-          name: my-secret​
-          key: username​
-    resources: {}​
-  dnsPolicy: ClusterFirst​
-  restartPolicy: Never​
-status: {}​
-```​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    env:
+    - name: USER_NAME
+      valueFrom:
+        secretKeyRef:
+          name: my-secret
+          key: username
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+```
 
 ```sh
-# kubectl create -f nginx.yml​
-# kubectl exec -it nginx -- env​
-# kubectl create sa admin​
-# kubectl run busybox --image=busybox --restart=Never --dry-run -o yaml -- /bin/sh -c "sleep 3600" > busybox.yml​
-# kubectl create -f busybox.yml​
-# kubectl describe po busybox​
+# kubectl create -f nginx.yml
+# kubectl exec -it nginx -- env
+# kubectl create sa admin
+# kubectl run busybox --image=busybox --restart=Never --dry-run -o yaml -- /bin/sh -c "sleep 3600" > busybox.yml
+# kubectl create -f busybox.yml
+# kubectl describe po busybox
 ```
 
 ```yaml
-apiVersion: v1​
-kind: Pod​
-metadata:​
-  creationTimestamp: null​
-  labels:​
-    run: busybox​
-  name: busybox​
-spec:​
-  serviceAccountName: admin​
-  containers:​
-  - args:​
-    - /bin/sh​
-    - -c​
-    - sleep 3600​
-    image: busybox​
-    name: busybox​
-    resources: {}​
-  dnsPolicy: ClusterFirst​
-  restartPolicy: Never​
-status: {}​
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: busybox
+  name: busybox
+spec:
+  serviceAccountName: admin
+  containers:
+  - args:
+    - /bin/sh
+    - -c
+    - sleep 3600
+    image: busybox
+    name: busybox
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
 ```
 </details>
 
@@ -1690,163 +1690,163 @@ status: {}​
 
 ## Observability 
 
-- Understand LivenessProbes and ReadinessProbes​
-https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes​
+- Understand LivenessProbes and ReadinessProbes
+https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 
-- Understand Container Logging​
-https://kubernetes.io/docs/concepts/cluster-administration/logging/​
+- Understand Container Logging
+https://kubernetes.io/docs/concepts/cluster-administration/logging/
 
-- Understand how to monitor applications in kubernetes​
-https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/​
+- Understand how to monitor applications in kubernetes
+https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/
 
-- Understand Debugging in Kubernetes​
+- Understand Debugging in Kubernetes
 https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/
 
 ### Exercises
 
 ### Lab-01
-- Create an nginx pod with a liveness probe that just runs the command 'ls'. ​
-- Save its YAML in pod.yaml. ​
+- Create an nginx pod with a liveness probe that just runs the command 'ls'. 
+- Save its YAML in pod.yaml. 
 - Run it, check its probe status, delete it.
 
 <details><summary>show</summary>
 
 ```sh
-# kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > pod.yaml​
-# kubectl create -f pod.yaml​
+# kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > pod.yaml
+# kubectl create -f pod.yaml
 # kubectl describe pod nginx | grep -i liveness
-# kubectl delete -f pod.yaml​
+# kubectl delete -f pod.yaml
 ```
 </details>
 
 ### Lab-02
-- Modify the pod.yaml file so that liveness probe starts kicking in after 5 seconds whereas the interval between probes would be 5 seconds. ​
+- Modify the pod.yaml file so that liveness probe starts kicking in after 5 seconds whereas the interval between probes would be 5 seconds. 
 - Run it, check the probe, delete it.
 
 <details><summary>show</summary>
 ```sh
 # kubectl explain pod.spec.containers.livenessProbe
-# kubectl create -f pod.yaml​
-# kubectl describe po nginx | grep -i liveness​
-# kubectl delete -f pod.yaml​
+# kubectl create -f pod.yaml
+# kubectl describe po nginx | grep -i liveness
+# kubectl delete -f pod.yaml
 ```
 </details>
 
 
 
 ### Lab-03
-- Create an nginx pod (that includes port 80) with an HTTP readinessProbe on path '/' on port 80. ​
+- Create an nginx pod (that includes port 80) with an HTTP readinessProbe on path '/' on port 80. 
 - Again, run it, check the readinessProbe, delete it.
 
 <details><summary>show</summary>
 ```sh
-# kubectl run nginx --image=nginx --dry-run -o yaml --restart=Never --port=80 > pod.yaml​
-# vim pod.yaml​
-# kubectl create -f pod.yaml​
+# kubectl run nginx --image=nginx --dry-run -o yaml --restart=Never --port=80 > pod.yaml
+# vim pod.yaml
+# kubectl create -f pod.yaml
 # kubectl describe pod nginx | grep -i readiness
-# kubectl delete -f pod.yaml​
+# kubectl delete -f pod.yaml
 ```
 </details>
 
 
 
 ### Lab-04
-- Create a busybox pod that runs:​
+- Create a busybox pod that runs:
  ```sh
- 'i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 1; done' ​
+ 'i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 1; done' 
  ```
 - Check its logs
 
 
 <details><summary>show</summary>
 ```sh
-# kubectl run busybox --image=busybox --restart=Never -- /bin/sh -c 'i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 1; done'​
-​# kubectl logs busybox -f
+# kubectl run busybox --image=busybox --restart=Never -- /bin/sh -c 'i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 1; done'
+# kubectl logs busybox -f
 ```
 </details>
 
 
 
 ### Lab-05
-- Create a busybox pod with this command “echo I am from busybox pod; sleep 3600;”​
+- Create a busybox pod with this command “echo I am from busybox pod; sleep 3600;”
 - Verify the logs.
 
 <details><summary>show</summary>
 ```sh
-# kubectl run busybox --image=busybox --restart=Never -- /bin/sh -c "echo I am from busybox pod; sleep 3600;"​
+# kubectl run busybox --image=busybox --restart=Never -- /bin/sh -c "echo I am from busybox pod; sleep 3600;"
 # kubectl logs busybox
 ```
 </details>
 
 
 ### Lab-06
-- Create a busybox pod that runs:​
+- Create a busybox pod that runs:
 
 ```sh
-'ls /notexist'​
+'ls /notexist'
 ```
-- Determine if there's an error, see it. ​
+- Determine if there's an error, see it. 
 - In the end, delete the pod
 
 <details><summary>show</summary>
 ```sh
 # kubectl run busybox --restart=Never --image=busybox -- /bin/sh -c 'ls /notexist'
-# kubectl logs busybox​
-# kubectl describe po busybox​
+# kubectl logs busybox
+# kubectl describe po busybox
 # kubectl delete po busybox
 ```
 </details>
 
 
 ### Lab-07
-- Create the pod with this kubectl create -f  not-running.yml. ​
-- The pod is not in the running state. ​
+- Create the pod with this kubectl create -f  not-running.yml. 
+- The pod is not in the running state. 
 - Debug it.
 
 <details><summary>show</summary>
 ```sh
-# kubectl create -f not-running.yml ​
-# kubectl get pod not-running​
+# kubectl create -f not-running.yml 
+# kubectl get pod not-running
 # kubectl describe po not-running
 # kubectl edit pod not-running
 ### OR
-# kubectl set image pod/not-running not-running=nginx​
+# kubectl set image pod/not-running not-running=nginx
 ```
 </details>
 
 
 ### Lab-08
-- Create a busybox pod that runs 'notexist'. ​
-- Determine if there's an error, see it.​
+- Create a busybox pod that runs 'notexist'. 
+- Determine if there's an error, see it.
 - In the end, delete the pod forcefully with a 0 grace period
 
 <details><summary>show</summary>
 ```sh
-# kubectl run busybox --restart=Never --image=busybox -- notexist​
-# kubectl logs busybox # will bring nothing! container never started​
-# kubectl describe po busybox # in the events section, you'll see the error​
-# kubectl get events | grep -i error # you'll see the error here as well​
-# kubectl delete po busybox --force --grace-period=0​
+# kubectl run busybox --restart=Never --image=busybox -- notexist
+# kubectl logs busybox # will bring nothing! container never started
+# kubectl describe po busybox # in the events section, you'll see the error
+# kubectl get events | grep -i error # you'll see the error here as well
+# kubectl delete po busybox --force --grace-period=0
 ```
 </details>
 
 ### Lab-09
-- Get CPU/memory utilization for nodes​
+- Get CPU/memory utilization for nodes
 
 <details><summary>show</summary>
 ```sh
-# kubectl top nodes​
+# kubectl top nodes
 ```
 </details>
 
 ### Lab-10
-- Get the memory and CPU usage of all the pods and find out top 3 pods which have the highest usage​
+- Get the memory and CPU usage of all the pods and find out top 3 pods which have the highest usage
 - Put them into the cpu-usage.txt file
 
 <details><summary>show</summary>
 ```sh
-# kubectl top pod --all-namespaces | sort --reverse --key 3 --numeric | head -3​
-# kubectl top pod --all-namespaces | sort --reverse --key 3 --numeric | head -3 > cpu-usage.txt​
+# kubectl top pod --all-namespaces | sort --reverse --key 3 --numeric | head -3
+# kubectl top pod --all-namespaces | sort --reverse --key 3 --numeric | head -3 > cpu-usage.txt
 # cat cpu-usage.txt
 ```
 </details>
@@ -1855,9 +1855,9 @@ https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/
 
 ## Services & Networking
 
-https://kubernetes.io/docs/concepts/services-networking/service/​
+https://kubernetes.io/docs/concepts/services-networking/service/
 
-https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/​
+https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/
 
 https://kubernetes.io/docs/concepts/services-networking/network-policies/
 
@@ -1865,25 +1865,25 @@ https://kubernetes.io/docs/concepts/services-networking/network-policies/
 
 ### Lab-01
 
-- Create an abstraction  layer infront of the pods​
-- Use labels to select which pods to send traffic to​
+- Create an abstraction  layer infront of the pods
+- Use labels to select which pods to send traffic to
 
 
 <details><summary>show</summary>
 
 ```yaml
-apiVersion: v1​
-kind: Service​
-metadata:​
-  name: my-service​
-spec:​
-  type: ClusterIP​
-  selector:​
-    app: nginx​
-  ports:​
-  - protocol: TCP​
-    port: 8080​
-    targetPort: 80​
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 80
 ```
 </details>
 
@@ -1891,56 +1891,56 @@ spec:​
 
 ### Lab-02
 
-- Network Policies:​
-    - How a group of pods can communication with:​
-        - Another group of pods​
-        - Other network endpoints​
+- Network Policies:
+    - How a group of pods can communication with:
+        - Another group of pods
+        - Other network endpoints
 
-- Supports configuring:​
-    - Ingress/Egress rules based on:​
-        - CIDR blocks, exceptions​
-        - Namespace and pod selector based on labels​
+- Supports configuring:
+    - Ingress/Egress rules based on:
+        - CIDR blocks, exceptions
+        - Namespace and pod selector based on labels
         - Ports/protocols
 
 <details><summary>show</summary>
 
 ```yaml
 
-apiVersion: networking.k8s.io/v1​
-kind: NetworkPolicy​
-metadata:​
-  name: test-network-policy​
-  namespace: default​
-spec:​
-  podSelector:​
-    matchLabels:​
-      role: db​
-  policyTypes:​
-  - Ingress​
-  - Egress​
-  spec:​
-  ingress:​
-  - from:​
-    - ipBlock:​
-        cidr: 172.17.0.0/16​
-        except:​
-        - 172.17.1.0/24​
-    - namespaceSelector:​
-        matchLabels:​
-          project: myproject​
-    - podSelector:​
-        matchLabels:​
-          role: frontend​
-    ports:​
-    - protocol: TCP​
-      port: 6379​
-      spec:​
-        egress:​
-        - to:​
-          - ipBlock:​
-            cidr: 10.0.0.0/24​
-          ports:​
-          - protocol: TCP​
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: test-network-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+  - Ingress
+  - Egress
+  spec:
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 172.17.0.0/16
+        except:
+        - 172.17.1.0/24
+    - namespaceSelector:
+        matchLabels:
+          project: myproject
+    - podSelector:
+        matchLabels:
+          role: frontend
+    ports:
+    - protocol: TCP
+      port: 6379
+      spec:
+        egress:
+        - to:
+          - ipBlock:
+            cidr: 10.0.0.0/24
+          ports:
+          - protocol: TCP
           port: 5978
 
 ```
