@@ -365,17 +365,19 @@ respectively and check the status.​
 * Show metrics of the pod containers and puts them into file.log and verify
 
 <details><summary>show</summary>
-<p>
 
 first create single container pod with dry run flag​
 
 ```sh
+
 kubectl run busybox --image=busybox --restart=Never --dry-run -o yaml -- bin/sh -c "sleep 3600; ls" > multi-container.yaml​
+
 ```
 
 edit the pod to following yaml and create it​
 
 ```yaml
+
 ​apiVersion: v1​
 kind: Pod​
 metadata:​
@@ -410,7 +412,9 @@ dnsPolicy: ClusterFirst​
 restartPolicy: Never​
 status: {}​
 
-```​
+```
+​
+
 
 ```sh
 kubectl create -f multi-container.yaml​
@@ -436,19 +440,17 @@ Use emptyDir Volume and mount it on path:​
 Verify both containers are running.​
 
 <details><summary>show</summary>
-<p>
+
 
 Create an initial yaml file with this​
 
 ```sh
+
 kubectl run multi-cont-pod --image=busbox --restart=Never --dry-run -o yaml > multi-container.yaml​
 
-​```
-
-Edit the yml as below and create it​
-
-```sh
+# Edit the yml as below and create it​
 kubectl create -f multi-container.yamlkubectl get po multi-cont-pod​
+
 ```
 
 ```yaml
@@ -1903,6 +1905,7 @@ spec:​
 <details><summary>show</summary>
 
 ```yaml
+
 apiVersion: networking.k8s.io/v1​
 kind: NetworkPolicy​
 metadata:​
@@ -1939,6 +1942,7 @@ spec:​
           ports:​
           - protocol: TCP​
           port: 5978
+
 ```
 
 </details>
