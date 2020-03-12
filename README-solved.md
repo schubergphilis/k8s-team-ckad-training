@@ -212,8 +212,8 @@ Address: 10.96.0.1
 * Ivan Dechovski
 * Jeferson Vitalino
 * Alberto Rodriguez
-* Giancarlo Rubio 
-
+* Giancarlo Rubio
+* Deniz Zoeteman
 
 # What to expect from the exam?
 
@@ -611,7 +611,7 @@ kubeclt get pods --show-labels
 ```
 </p>
 </details>
- 
+
 
 * Get the pods with label env=acc
 <details><summary>show</summary>
@@ -621,7 +621,7 @@ kubectl get pods -l env=acc
 ```
 </p>
 </details>
- 
+
 
 * Get the pods with label env
 <details><summary>show</summary>
@@ -631,7 +631,7 @@ kubectl get pods -L env
 ```
 </p>
 </details>
- 
+
 
 * Get the pods with labels env=dev and env=prod and output the labels as well
 <details><summary>show</summary>
@@ -641,7 +641,7 @@ kubectl get pods -l 'env in (dev,prod)' --show-labels
 ```
 </p>
 </details>
- 
+
 
 * Change the label for one of the pod to env=uat and list all the pods to verify
 <details><summary>show</summary>
@@ -654,7 +654,7 @@ kubectl get pods --show-labels
 ```
 </p>
 </details>
- 
+
 
 * Remove the labels for the pods that we created now and verify all the labels are removed
 <details><summary>show</summary>
@@ -671,7 +671,7 @@ kubectl get po --show-labels
 ```
 </p>
 </details>
- 
+
 
 * Let’s add the label app=nginx for all the pods and verify
 <details><summary>show</summary>
@@ -688,9 +688,9 @@ kubectl get po --show-labels
 ```
 </p>
 </details>
- 
 
- 
+
+
 
 * Get all the nodes with labels 
 <details><summary>show</summary>
@@ -701,7 +701,7 @@ kubectl get nodes --show-labels
 ```
 </p>
 </details>
- 
+
 
 * Label the node nodeName=nginxnode
 <details><summary>show</summary>
@@ -712,7 +712,7 @@ kubectl label node <nodename> nodeName=nginxnode
 ```
 </p>
 </details>
- 
+
 
 * Create a Pod that will be deployed on this node with the label nodeName=nginxnode
 
@@ -743,7 +743,7 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Never
 status: {}
-``` 
+```
 
 ```sh
 kubectl create -f pod.yaml
@@ -790,7 +790,7 @@ kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > pod.yaml
 
 Add the nodeSelector like below and create the pod
 
- 
+
 ```yaml
 
 apiVersion: v1
@@ -825,7 +825,7 @@ kubectl create -f pod.yaml
 
 
 
- 
+
 
 * Create a deployment called webapp with image nginx:1.17.1 with 5 replicas
 <details><summary>show</summary>
@@ -838,9 +838,9 @@ kubectl scale deployment webapp --replicas=5
 ```
 </p>
 </details>
- 
 
- 
+
+
 
 * Get the pods of this deployment and their labels
 <details><summary>show</summary>
@@ -858,7 +858,7 @@ kubectl get pods -l app=webapp
 ```
 </p>
 </details>
- 
+
 
 * Scale the deployment from 5 replicas to 10 replicas and verify
 <details><summary>show</summary>
@@ -872,7 +872,7 @@ kubectl get po -l app=webapp
 ```
 </p>
 </details>
- 
+
 
 * Get the deployment rollout status
 <details><summary>show</summary>
@@ -884,7 +884,7 @@ kubectl rollout status deploy webapp
 ```
 </p>
 </details>
- 
+
 
 * Get the replicaset that created with this deployment
 <details><summary>show</summary>
@@ -896,7 +896,7 @@ kubectl get rs -l app=webapp
 ```
 </p>
 </details>
- 
+
 
 * Get the yaml of the replicaset and pods of this deployment
 <details><summary>show</summary>
@@ -912,9 +912,9 @@ kubectl get po -l app=webapp -o yaml
 ```
 </p>
 </details>
- 
 
- 
+
+
 
 * Update the deployment with the image version 1.17.4 and verify
 <details><summary>show</summary>
@@ -948,9 +948,9 @@ kubectl get po -l app=webapp
 ```
 </p>
 </details>
- 
 
- 
+
+
 
 * Undo the deployment to the previous version 1.17.1 and verify Image has the previous version
 <details><summary>show</summary>
@@ -964,7 +964,7 @@ kubectl describe deploy webapp | grep Image
 ```
 </p>
 </details>
- 
+
 
 * Update the deployment with the wrong image version 1.100 and verify something is wrong with the deployment
 <details><summary>show</summary>
@@ -980,7 +980,7 @@ kubectl get pods (ImagePullErr)
 ```
 </p>
 </details>
- 
+
 
 * Undo the deployment with the previous version and verify everything is Ok
 <details><summary>show</summary>
@@ -996,9 +996,9 @@ kubectl get pods
 ```
 </p>
 </details>
- 
 
- 
+
+
 
 * Apply the autoscaling to this deployment with minimum 10 and maximum 20 replicas and target CPU of 85% and verify hpa is created and replicas are increased to 10 from 1
 <details><summary>show</summary>
@@ -1014,9 +1014,9 @@ kubectl get pod -l app=webapp
 ```
 </p>
 </details>
- 
 
- 
+
+
 
 * Clean Up
 <details><summary>show</summary>
@@ -1065,11 +1065,11 @@ spec:
       restartPolicy: Never
 status: {}
 ```
- 
+
 ```sh
 kubectl create -f hello-job.yaml
 ```
- 
+
 
  </p>
 </details>
@@ -1090,9 +1090,9 @@ kubectl delete job hello-job
 ```
 </p>
 </details>
- 
 
- 
+
+
 
 * Create the same job and make it run 10 times parallel
 <details><summary>show</summary>
@@ -1123,9 +1123,9 @@ status: {}
 ```
 </p>
 </details>
- 
 
- 
+
+
 
 * Create a Cronjob with busybox image that prints date and hello from kubernetes cluster message for every minute
 <details><summary>show</summary>
@@ -1511,7 +1511,7 @@ status: {}
 
 - Edit the pod like below and create
 
- 
+
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -1536,7 +1536,7 @@ spec:
   restartPolicy: Never
 status: {}
 ```
- 
+
 ```sh 
 # kubectl create -f sbp-sleep.yml
 # kubectl exec -it sbp-sleep – sh id 
@@ -1568,7 +1568,7 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Never
 status: {}
-```
+ ```
 
 ```sh
 # kubectl create -f sbp-sleep.yml
