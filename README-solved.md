@@ -241,7 +241,7 @@ Address: 10.96.0.1
 
 * Generate pod/service yaml with kubectl:
 
-* ```sh
+```sh
 kubectl run nginx --image=nginx --restart=Never --dry-run -o yaml > pod.yaml
 kubectl expose deployment nginx --port=80 --target-port=8000
 ```
