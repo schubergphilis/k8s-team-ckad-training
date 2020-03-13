@@ -314,7 +314,7 @@ kubectl -n sbp describe po nginx
 
 </details>
 
-###Lab-04
+### Lab-04
 
 * Change the Image version back to 1.17.8 for the pod you just updated and observe the changes
 
