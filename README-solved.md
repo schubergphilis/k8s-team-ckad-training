@@ -11,10 +11,10 @@
 <a name="requirements"></a>
 [ Back to index ](#index)
 ## Requirements
-* Docker [https://docs.docker.com/install/#supported-platforms](https://docs.docker.com/install/#supported-platforms)
-* Kubectl [https://kubernetes.io/docs/tasks/tools/install-kubectl/](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-* Kind [https://kind.sigs.k8s.io/docs/user/quick-start/](https://kind.sigs.k8s.io/docs/user/quick-start/)
-* vi, vim or nano
+* [Docker](https://docs.docker.com/install/#supported-platforms)
+* [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/)
+* Knowledge of one command line editor like vi, vim or nano.
 
 
 <a name="create"></a>
@@ -51,6 +51,7 @@ kubectl -n kube-system set env daemonset/calico-node FELIX_IGNORELOOSERPF=true
 ```
 
 Make sure all pods are up and Running before you follow the next steps.
+
 ```sh
 kubectl get pods --all-namespaces -o wide
 
@@ -100,7 +101,6 @@ kubectl config set-context --current --namespace=nginx
 Deploy a nginx pod
 
 ```sh
-
 kubectl create -f https://raw.githubusercontent.com/schubergphilis/k8s-team-ckad-training/master/pod-nginx.yml
 ```
 
